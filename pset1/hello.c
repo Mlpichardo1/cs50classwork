@@ -3,5 +3,5 @@
 // int is INTEGER       below is a FUNCTION
 int main(void)
 {
-    printf("Hello World!\n");
+    printf("hello, world!\n");
 }

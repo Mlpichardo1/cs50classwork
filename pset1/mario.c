@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <cs50.h>
+#include <stdio.h>
 
 int main(void)
 {
@@ -11,13 +11,13 @@ int main(void)
     }
     while(n <= 0);
     // Print out this many rows
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < n; i++)
     {
         // Print out this many columns
-        for (int j = 0; j < 0; j++)
+        for (int j = 0; j > 0; j++)
         {
-           printf("#");
+           printf("##\n");
         }
-        printf("\n");
+        printf("#\n");
     }
 }
