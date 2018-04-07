@@ -3,21 +3,27 @@
 
 int main(void)
 {
+    int height;
+
     // Prompt user for a positve number
-    int n;
     do
     {
-        n = get_int("Height: ");
+        height = get_int("Choose the Height for my Pyramid: ");
     }
-    while(n <= 23);
+    while (height < 0 || height > 23);
     // Print out this many rows
-    for (int i = 0; i < n; i++)
+    for (int row = 0; row < height; row++)
     {
         // Print out this many columns
-        for (int j = 0; j > 0; j++)
+        for (int space = height - row; space > 1; space--)
         {
-           printf("##\n");
+            printf(" ");
         }
-        printf("#\n");
+        // Print Blocks for pyramid
+        for (int blocks = 0; blocks < row + 2; blocks++)
+        {
+            printf("#");
+        }
+        printf("\n");
     }
 }
