@@ -7,9 +7,9 @@ int main(void)
     int n;
     do
     {
-        n = get_int("Postive Number: ");
+        n = get_int("Height: ");
     }
-    while(n <= 0);
+    while(n <= 23);
     // Print out this many rows
     for (int i = 0; i < n; i++)
     {
