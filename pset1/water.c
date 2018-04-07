@@ -15,7 +15,7 @@ int main(void)
     }
     while (minutes <= 0);
     {
-    // Display Minutes and Bottles
+        // Display Minutes and Bottles
         printf("Minutes: %i\n", minutes);
         printf("Bottles: %i\n", result);
     }
