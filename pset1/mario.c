@@ -8,7 +8,7 @@ int main(void)
     // Prompt user for a positve number
     do
     {
-        height = get_int("Choose the Height for my Pyramid: ");
+        height = get_int("Choose the Height for my Pyramid: ");fsd
     }
     while (height < 0 || height > 23);
     // Print out this many rows
