@@ -45,3 +45,8 @@ int main(void)
     printf("Coins: %i\n", count + convert);
 
 }
+
+// Suggestions:
+// 1. Put comments on the line of code they are referencing. Unless the comment pertains to a block of code.
+// 2. Line 45 why count + convert? Could it just be count?
+// 3. Maybe comment variables when they're declared. Then additional comment if needed when they're first used.

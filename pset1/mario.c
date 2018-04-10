@@ -27,3 +27,10 @@ int main(void)
         printf("\n");
     }
 }
+
+// Line 11: after semi-colon you have 'fsd'. This throws an error.
+// Be sure to use style50 and check50 before you submit50, to help catch little things like this.
+// Maybe a comment at the top to summarize the program, what it does
+// Maybe comment variables as they're declared.
+// I say maybe because I am not sure. I know that they want us to comment, but I have heard devs complain about
+// too many comments or overly simple comments :)
