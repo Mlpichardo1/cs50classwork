@@ -22,7 +22,7 @@ int main(void)
     }
     // Loop over the string, character by character
     for (int i = 0; i < length; i++)
-        // check if character is a whitespace
+        // check if character is a whitespace and print second letter
         if (!isalpha(name[i]))
         {
             printf("%c", toupper(name[i + 1]));
