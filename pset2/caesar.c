@@ -4,34 +4,44 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-int main(int argc, string argv[])
+int main()
 {
+
     string input;
+    int i, key;
 
     do
     {
-        // prompt user for input
-        input = get_string();
+        // Prompt user for Name
+        input = get_string("Enter a message to encrypt: ");
+        key = get_int("Enter key: ");
     }
-    while (argc < 1);
+    while (input < 0);
 
-    int length = strlen(input);
-    int k = atoi(argv[2]);
-
+    char encrpyt;
     // iterate through user input
-    for (int i = 0; i < length; i++)
-    {
-        if (islower(input[i]))
-        {
-            printf("%c", (input[i] + k));
-        }
-        else (isupper(input[i]));
-        {
-            printf("%c", (input[i] + k));
-        }
-        printf("\n");
-    }
-}
+      for(i = 0; input[i] != '\0'; ++i){
+        encrpyt = input[i];
 
-// isalpha
-// isupper
+        if(encrpyt >= 'a' && ch <= 'z'){
+            encrpyt = encrpyt + key;
+
+            if(encrpyt > 'z'){
+                encrpyt = encrpyt - 'z' + 'a' - 1;
+            }
+
+            input[i] = encrpyt;
+        }
+        else if(encrpyt >= 'A' && encrpyt <= 'Z'){
+            encrpyt = encrpyt + key;
+
+            if(encrpyt > 'Z'){
+                encrpyt = encrpyt - 'Z' + 'A' - 1;
+            }
+
+            input[i] = encrpyt;
+        }
+    }
+    printf("Encrypted message: %s", encrpyt);
+    printf("\n");
+}
