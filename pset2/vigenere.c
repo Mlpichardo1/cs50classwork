@@ -15,55 +15,50 @@ int main(int argc, string argv[])
         return 1;
     }
 
-    for (int i = 0, n = strlen(argv[1]); i < n; )
-
-    char key = isalpha(argv[1][0]); // store user key phrase or letter
-
-    if (key < 0) // check if the key is alphabetical
-    {
-        printf("Try again\n");
-        return 1;
-    }
-
     else
     {
-
-        input = get_string("Enter a message to encrypt: "); // Prompt user for input
-
-        printf("ciphertext: ");
-
-        for (int i = 0, n = strlen(input); i < n; i++)
+        for (int i = 0, n = strlen(argv[1]); i < n; i++)
         {
-            char cipher = input[i];
-            //check if the letter is uppercase or lowercase then convert
-
-            if islower(input[i])
+            if (!isalpha(argv[1][i])) // check if the key is alphabetical
             {
-                cipher = (((input[i] + key) - 97) % 26) + 97;
+                printf("Usage: Only use alphabetical characters\n");
+                return 1;
             }
-
-            if isupper(input[i])
-            {
-                cipher = (((input[i] + key) - 65) % 26) + 65;
-            }
-
-            //if neither then just print whats left
-            if (isalpha(input[i]))
-            {
-                input[i] = cipher;
-                printf("%c", cipher);
-            }
-
-            else
-            {
-                printf("%c", cipher);
-            }
-
         }
-
-        printf("\n");
-        return 0;
-
     }
 
+    string key = argv[1];
+    int keylen = strlen(key); // store user key length
+
+    input = get_string("Enter a message to encrypt: "); // Prompt user for input
+    printf("ciphertext: ");
+
+    for (int i = 0, j = 0, n = strlen(input); i < n; i++)
+    {
+        int cipher = tolower(key[j % keylen]) - 'a';
+        //get key for letter input
+
+        if islower(input[i])
+        {
+            // keep lowercase
+            printf("%c", 'a' + (input[i] - 'a' + cipher) % 26);
+            j++;
+        }
+
+        else if isupper(input[i])
+        {
+            // Keep uppercase
+            printf("%c", 'A' + (input[i] - 'A' + cipher) % 26);
+            j++;
+        }
+
+        else
+        {
+            // return leftovers
+            printf("%c", input[i]);
+        }
+
+    }
+    printf("\n");
+    return 0;
 }
