@@ -1,3 +1,5 @@
+//Peer Review SS
+
 #include <stdio.h>
 #include <cs50.h>
 #include <string.h>
@@ -5,11 +7,13 @@
 #include <stdlib.h>
 
 int main(int argc, string argv[])
+//prss: main takes two arguments: count and array of strings
 {
 
     string input; // store user input
 
     if (argc != 2)
+    //PRSS: check is 2 arguments are entered on command line
     {
         printf("Usage: enter key\n"); // Alert user if key is not entered properly
         return 1;
@@ -28,20 +32,24 @@ int main(int argc, string argv[])
 
         input = get_string("Enter a message to encrypt: "); // Prompt user for input
         printf("ciphertext: ");
+        //prss: placeholder for text to print after enciphered?
 
         for (int i = 0, n = strlen(input); i < n; i++)
         {
             char cipher = input[i];
-            //check if the letter is uppercase or lowercase then convert
+            //pr ss: variable to hold each character as it's enciphered?
 
+            //check if the letter is uppercase or lowercase then convert
             if islower(input[i])
             {
                 cipher = (((input[i] + key) - 97) % 26) + 97;
+                //prss: transform char to ascii, to alpha then to enciphered ascii
             }
 
             if isupper(input[i])
             {
                 cipher = (((input[i] + key) - 65) % 26) + 65;
+                //prss: transform char to ascii, to alpha then to enciphered ascii
             }
 
             //if neither then just print whats left
@@ -54,6 +62,7 @@ int main(int argc, string argv[])
             else
             {
                 printf("%c", cipher);
+                //prss: if [i] is not a letter print char as is
             }
 
         }
