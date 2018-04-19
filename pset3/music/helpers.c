@@ -1,7 +1,7 @@
 // Helper functions for music
 
 #include <cs50.h>
-
+#include <math.h>
 #include "helpers.h"
 
 // Converts a fraction formatted as X/Y to eighths
