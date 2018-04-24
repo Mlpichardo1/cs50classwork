@@ -36,11 +36,11 @@ int main(int argc, string argv[])
     for (int i = 0, j = 0, n = strlen(input); i < n; i++)
     {
         int cipher = tolower(key[j % keylen]) - 'a';
-        //get key for letter input
+        //get key for letter input and make it lowercase
 
         if islower(input[i])
         {
-            // keep lowercase
+            // keep output lowercase
             printf("%c", 'a' + (input[i] - 'a' + cipher) % 26);
             j++;
         }
