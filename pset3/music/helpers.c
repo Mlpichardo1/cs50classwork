@@ -136,3 +136,11 @@ bool is_rest(string s)
     }
     return false;
 }
+
+// style50 says,"Looks good!"
+// I would add more comments overall. What seems simple and straight-forward,
+//  may not when you come back to it.
+// Logic and flow looks good.
+// A switch statement for the duration function could look a little tighter
+// I like that you split input up into variables straight away.
+// The if/else statement for the octave switch is legit, fo' shizzle.
