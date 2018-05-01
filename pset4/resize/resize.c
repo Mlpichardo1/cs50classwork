@@ -112,7 +112,6 @@ int main(int argc, char *argv[])
             {
                 fseek(inptr, -(bi.biWidth * 3 + padding), SEEK_CUR);
             }
-
         }
     }
 
