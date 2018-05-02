@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
                     fwrite(&triple, sizeof(RGBTRIPLE), 1, outptr);
                 }
             }
-            // skip over padding, if any
+            // skip over padding
             fseek(inptr, padding, SEEK_CUR);
 
             // then add it back (to demonstrate how) Resized Padding
