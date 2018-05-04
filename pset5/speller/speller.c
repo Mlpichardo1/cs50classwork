@@ -193,3 +193,9 @@ double calculate(const struct rusage *b, const struct rusage *a)
                 / 1000000.0);
     }
 }
+
+
+// bool find()
+// bool exists = find(list, 6)
+// node* insert (node* head, VALUE val);
+// destroy ---  void destroy(node* head);  destroy(list)
