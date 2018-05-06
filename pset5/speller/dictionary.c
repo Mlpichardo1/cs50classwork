@@ -32,7 +32,6 @@ bool load(const char *dictionary)
         struct node *next;
     }
     node;
-
     // node *hashtable[50];
     // node1->next = node2;
 
@@ -44,10 +43,12 @@ bool load(const char *dictionary)
             unload();
             return false;
         }
-        else if
+        else
         {
             strcpy(new_node->word, word);
         }
+        // new_node->next = head;
+        // head = new_node;
     }
 
     return false;
