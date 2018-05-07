@@ -1,8 +1,18 @@
 // Implements a dictionary's functionality
 
+#include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 #include "dictionary.h"
+
+typedef struct node
+    {
+        char word[LENGTH + 1];
+        struct node *next;
+    }
+    node;
+
+    node* hashtable[HASHTABLE_SIZE];
 
 // Returns true if word is in dictionary else false
 bool check(const char *word)
@@ -26,14 +36,21 @@ bool check(const char *word)
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
-    typedef struct node
+
+    // make all hash table elements NULL
+    for (int i = 0; i < HASHTABLE_SIZE; i++)
     {
-        char word[LENGTH + 1];
-        struct node *next;
+        hashtable[i] = NULL;
     }
-    node;
-    // node *hashtable[50];
-    // node1->next = node2;
+
+
+    // open dictionary
+    FILE* file_d = fopen(dictionary, "r");
+    if (file_d == NULL)
+    {
+        printf("Unable to open dictionary.\n");
+        return false;
+    }
 
     while (fscanf(dictionary, "%s", word) != EOF)
     {
