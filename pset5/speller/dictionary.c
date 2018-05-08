@@ -1,8 +1,9 @@
 // Implements a dictionary's functionality
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <string.h>
+#include <strings.h>
 #include "dictionary.h"
 
 typedef struct node
@@ -12,22 +13,31 @@ typedef struct node
     }
     node;
 
-    node* hashtable[HASHTABLE_SIZE];
+    node* hashtable[26];
+
+    int hash(char* word)
+    {
+        int input = tolower(word[0]) - 'a';
+        return input;
+    }
 
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    node *cursor = head;
+    int hash_num = hash(word);
+    node *cursor = hashtable[hash_num];
 
     while (cursor != NULL)
     {
-        int strcmp(word, cursor);
-        cursor = cursor->next;
-    }
-
-    if (word == cursor)
-    {
-        return true;
+        //use strcasecmp to see if word from dictionary
+        if (strcmp(cursor->word, word) == 0)
+        {
+            return true;
+        }
+        else
+        {
+            cursor = cursor->next;
+        }
     }
 
     return false;
@@ -36,14 +46,6 @@ bool check(const char *word)
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
-
-    // make all hash table elements NULL
-    for (int i = 0; i < HASHTABLE_SIZE; i++)
-    {
-        hashtable[i] = NULL;
-    }
-
-
     // open dictionary
     FILE* file_d = fopen(dictionary, "r");
     if (file_d == NULL)
@@ -52,6 +54,7 @@ bool load(const char *dictionary)
         return false;
     }
 
+    // read through the word and allocate space
     while (fscanf(dictionary, "%s", word) != EOF)
     {
         node *new_node = malloc(sizeof(node));
@@ -64,11 +67,14 @@ bool load(const char *dictionary)
         {
             strcpy(new_node->word, word);
         }
-        // new_node->next = head;
-        // head = new_node;
+
+        int hash_num = hash(word);
+        new_node->next = hashtable[hash_num];
+        hashtable[hash_num] = new_node;
+
     }
 
-    return false;
+    return true;
 }
 
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
