@@ -2,24 +2,32 @@
 
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <strings.h>
+#include <string.h>
 #include "dictionary.h"
 
+// Keep count of words searched
+int count_words = 0;
+
 typedef struct node
-    {
-        char word[LENGTH + 1];
-        struct node *next;
-    }
-    node;
+{
+    char word[LENGTH + 1];
+    struct node *next;
+}
+node;
 
-    node* hashtable[26];
+// define a hashtable
+node *hashtable[26];
 
-    int hash(char* word)
-    {
-        int input = tolower(word[0]) - 'a';
-        return input;
-    }
+// Convert letters to there ASCII value
+int hash(const char *word)
+{
+    char first = word[0];
+    int hashing = tolower(first) - 'a';
+    return hashing;
+}
 
 // Returns true if word is in dictionary else false
 bool check(const char *word)
@@ -29,8 +37,9 @@ bool check(const char *word)
 
     while (cursor != NULL)
     {
+        char *checker = cursor->word;
         //use strcasecmp to see if word from dictionary
-        if (strcmp(cursor->word, word) == 0)
+        if (strcasecmp(word, checker) == 0)
         {
             return true;
         }
@@ -47,16 +56,20 @@ bool check(const char *word)
 bool load(const char *dictionary)
 {
     // open dictionary
-    FILE* file_d = fopen(dictionary, "r");
+    FILE *file_d = fopen(dictionary, "r");
     if (file_d == NULL)
     {
         printf("Unable to open dictionary.\n");
+        unload();
         return false;
     }
 
+    char word[LENGTH + 1];
+
     // read through the word and allocate space
-    while (fscanf(dictionary, "%s", word) != EOF)
+    while (fscanf(file_d, "%s", word) != EOF)
     {
+        count_words++;
         node *new_node = malloc(sizeof(node));
         if (new_node == NULL)
         {
@@ -73,20 +86,35 @@ bool load(const char *dictionary)
         hashtable[hash_num] = new_node;
 
     }
-
+    fclose(file_d);
     return true;
 }
 
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
 unsigned int size(void)
 {
-    // TODO
-    return 0;
+    if (count_words > 0)
+    {
+        return count_words;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
-    // TODO
-    return false;
+    for (int i = 0; i < 26; i++)
+    {
+        node *cursor = hashtable[i];
+        while (cursor != NULL)
+        {
+            node *next = cursor->next;
+            free(cursor);
+            cursor = next;
+        }
+    }
+    return true;
 }
