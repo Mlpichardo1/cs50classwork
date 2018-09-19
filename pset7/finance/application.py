@@ -47,7 +47,55 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+
+        if not request.form.get("symbol"):
+            return apology("Invalid Stock Symbol")
+
+        elif not request.form.get("shares"):
+            return apology("Missing Shares")
+
+        symbol = request.form.get("symbol").upper()
+
+        #Lookup in api
+        quote = lookup(symbol)
+
+        #Checking if lookup failed
+        if quote == None:
+            return apology("Invalid Symbol")
+
+        #Check if user has sufficient funds in DB
+        cash = db.execute("SELECT cash FROM users WHERE id = :id", id=session["user_id"])
+        cash = cash[0]['cash']
+
+        price = quote["price"]
+        shares = int(request.form.get("shares"))
+        updated_cash = cash - shares * price
+
+        if updated_cash < 0:
+            return apology("You dont have enough Dough")
+
+        #Add share and update cash amount
+        db.execute("UPDATE users SET cash = :updated_cash WHERE id = :id", updated_cash=updated_cash, id=session["user_id"])
+
+        #Update user Portfolio
+        rows = db.execute("SELECT * FROM portfolios WHERE id=id", id=session["user_id"], symbol=symbol)
+        #Insert new row if no shares exist for that Symbol
+        if len(rows == 0):
+            db.execute("INSERT INTO portfolios (id, symbol, shares) VALUES(:id, :symbol, :shares)",
+                        id=session["user_id"], symbol=symbol, shares=shares)
+
+        else:
+            db.execute("UPDATE portfolios SET shares = shares + :shares", shares=shares)
+
+        #Update History
+        db.execute("INSERT INTO history (id, symbol, shares, price) VALUES(:id, :symbol, :shares, :price)",
+                        id=session["user_id"], symbol=symbol, shares=shares, price=price)
+
+        return render_template("/")
+
+    else:
+        return render_template("buy.html")
 
 
 @app.route("/history")
@@ -112,15 +160,23 @@ def quote():
     if request.method == "POST":
 
         #Ensure quote was entered
-        if not request.form.get("quote"):
+        if not request.form.get("symbol"):
             return apology("Please enter a Stock Symbol")
 
-        return render_template("quoted.html")
+        #Storing entered Symbol/ Get symbol and make uppercase
+        symbol = request.form.get("symbol").upper()
+
+        #Lookup in api
+        quote = lookup(symbol)
+
+        #Checking if lookup failed
+        if quote == None:
+            return apology("Invalid Symbol")
+
+        return render_template("quoted.html", name=quote["name"], symbol=symbol, price=quote["price"])
 
     else:
         return render_template("quote.html")
-
-    return apology("TODO")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -170,9 +226,6 @@ def register():
 
     else:
         return render_template("register.html")
-
-
-    return apology("TODO")
 
 
 @app.route("/sell", methods=["GET", "POST"])
