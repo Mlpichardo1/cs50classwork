@@ -232,7 +232,26 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+
+        if not request.form.get("symbol"):
+            return apology("Invalid Stock Symbol")
+
+        elif not request.form.get("shares"):
+            return apology("Missing Shares")
+
+        symbol = request.form.get("symbol").upper()
+
+        #Lookup in api
+        quote = lookup(symbol)
+
+        #Checking if lookup failed
+        if quote == None:
+            return apology("Invalid Symbol")
+
+
+    else:
+        return render_template("sell.html")
 
 
 def errorhandler(e):
