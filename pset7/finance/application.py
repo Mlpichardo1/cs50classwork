@@ -76,23 +76,23 @@ def buy():
             return apology("You dont have enough Dough")
 
         #Add share and update cash amount
-        db.execute("UPDATE users SET cash = :updated_cash WHERE id = :id", updated_cash=updated_cash, id=session["user_id"])
+        db.execute("UPDATE users WHERE id = :id SET cash = :updated_cash", id=session["user_id"], updated_cash=updated_cash)
 
         #Update user Portfolio
-        rows = db.execute("SELECT * FROM portfolios WHERE id=id", id=session["user_id"], symbol=symbol)
+        rows = db.execute("SELECT * FROM portfolios WHERE id = :id AND symbol = :symbol", id=session["user_id"], symbol=symbol)
         #Insert new row if no shares exist for that Symbol
         if len(rows == 0):
             db.execute("INSERT INTO portfolios (id, symbol, shares) VALUES(:id, :symbol, :shares)",
                         id=session["user_id"], symbol=symbol, shares=shares)
 
         else:
-            db.execute("UPDATE portfolios SET shares = shares + :shares", shares=shares)
+            db.execute("UPDATE portfolios WHERE id = :id SET shares = shares + :shares", id=session["user_id"], shares=shares)
 
         #Update History
         db.execute("INSERT INTO history (id, symbol, shares, price) VALUES(:id, :symbol, :shares, :price)",
                         id=session["user_id"], symbol=symbol, shares=shares, price=price)
 
-        return render_template("/")
+        return render_template("index.html")
 
     else:
         return render_template("buy.html")
@@ -249,6 +249,40 @@ def sell():
         if quote == None:
             return apology("Invalid Symbol")
 
+
+        #Price of share
+        price = quote["price"]
+
+        #Number of Shares selected
+        shares = int(request.form.get("shares"))
+
+        #Checking if user has share
+        shares_current_list = db.execute("SELECT shares FROM portfolios WHERE id=:id AND symbol=:symbol", id=session["user_id"], symbol=symbol)
+        if len(shares_current_list) == 0:
+            apology("Symbol is not owned")
+
+        shares_current = shares_current_list[0]["shares"]
+        updated_shares = shares - shares_current
+
+        if (updated_shares < 0):
+            return apology("Too many shares")
+
+        #Cash Increase after selling
+        cash_increase = price * shares;
+
+        #Update cash from users table
+        db.execute("UPDATE users SET cash=cash+:cash_increase WHERE id=:id", cash_increase=cash_increase, id=session["user_id"])
+
+        #Update Portfolios
+        if updated_shares == 0:
+            db.execute("DELETE FROM portfolios WHERE id = :id AND symbol = :symbol", id=session["user_id"], symbol=symbol)
+
+        elif updated_shares > 0:
+            db.execute("UPDATE FROM portfolios WHERE id = :id SET shares = :updated_shares", id=session["user_id"], updated_shares=updated_shares)
+
+        #Update History
+        db.execute("INSERT INTO history (id, symbol, shares, price) VALUES(:id, :symbol, :shares, :price)",
+                        id=session["user_id"], symbol=symbol, shares=shares, price=price)
 
     else:
         return render_template("sell.html")
